@@ -50,6 +50,7 @@ function RegFunc(){
           var RegLogin = $('#loginReg').val();
           var RegPassword = $('#passwordReg').val();
           var RegPasswordConfirm = $('#passwordConfirmReg').val();
+          
           var usernameRegex = /^[a-z][a-z0-9]{4,12}$/i;
           var passwordRegex = /^[a-zA-Z0-9]{8,16}$/;
 
