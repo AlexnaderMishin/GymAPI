@@ -31,7 +31,9 @@
     <div class="authorizationForm" id="form2">
         <p>Авторизация</p>
         <input type="text" id="loginAuth" placeholder="Введите логин : ">
+        
         <input type="password" id="passwordAuth" placeholder="Введите пароль : ">
+        <p id="logAuth_error"></p>
         <button onclick="AuthFunc()">Авторизация</button><br>
         <p id="form2btn">Регистрация нового пользователя</p>
     </div>
@@ -50,7 +52,7 @@ function RegFunc(){
           var RegLogin = $('#loginReg').val();
           var RegPassword = $('#passwordReg').val();
           var RegPasswordConfirm = $('#passwordConfirmReg').val();
-          
+
           var usernameRegex = /^[a-z][a-z0-9]{4,12}$/i;
           var passwordRegex = /^[a-zA-Z0-9]{8,16}$/;
 
@@ -136,16 +138,26 @@ function RegFunc(){
               type: 'post',
               data: 'data=' + JSONToServer,
 
-              error: function(){
-                  console.log('error');
+              error: function(response){
+                  console.log(response["message"]);
               },
               success: function(response){
                 console.log(response["login"]);
+                if(response["status"] == false){
+                    $('#logAuth_error').text(response["login"]);
+                    $('#logAuth_error').css("color" , "red");
+                    $('input').css("border-color" , "red");
+                }
+                if(response["status"] == true){
+                    // window.location = "index.php";
+                    window.location.href = "http://api/";
+                }
                 $('#userInfo').html("Добрый день : " + response["login"] + " ! ");
-                window.location = "index.php";
+                // window.location = "index.php";
                  
               }
-          })  
+          }) 
+
       }
     </script>
 </body>

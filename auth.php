@@ -16,22 +16,56 @@ $stmt = $pdo->query("SELECT * FROM `users` WHERE `username` = '$log'");
 $row = $stmt->fetch();
 
 
-if($log == $row['username'] && $pass == $row["password"]){
-    
-    $_SESSION['userId'] = $row["id"];
-    $_SESSION['userLogin'] = $row["username"];
-    
-    $response = [
-        "id" => $_SESSION['userId'],
-        "login" => $_SESSION['userLogin'],
-        "status" => $AuthStatus = true
-    ];
-    // $response = $arr;
-    // echo $_SESSION['userId'];
-
+if($log == $row['username']){
+    if($pass == $row["password"]){
+        $_SESSION['userId'] = $row["id"];
+        $_SESSION['userLogin'] = $row["username"];
+        $response = [
+            "message" => 'success',
+            "id" => $_SESSION['userId'],
+            "login" => $_SESSION['userLogin'],
+            "status" => true
+        ]; 
+    }else{
+        $response = [
+            "message" => 'success',
+            "id" => '',
+            "login" => 'Неверный пароль!',
+            "status" => false
+        ];
+    }
 }else{
-    echo "Пользователсь не существует!";
+    $response = [
+        "message" => 'success',
+        "id" => '',
+        "login" => 'Пользователь не найден!',
+        "status" => false
+    ];
 }
+
+// if($log == $row['username'] && $pass == $row["password"]){
+    
+//     $_SESSION['userId'] = $row["id"];
+//     $_SESSION['userLogin'] = $row["username"];
+    
+//     $response = [
+//         "message" => 'success',
+//         "id" => $_SESSION['userId'],
+//         "login" => $_SESSION['userLogin'],
+//         "status" => 'true'
+//     ];
+//     // $response = $arr;
+//     // echo $_SESSION['userId'];
+
+// }else{
+//     $response = [
+//         "message" => 'success',
+//         "id" => '',
+//         "login" => 'неверный логин или пароль',
+//         "status" => false
+//     ];
+//     // echo "Пользователсь не существует!";
+// }
 // if ($_SESSION['userId'])
 
 // {
@@ -40,6 +74,6 @@ if($log == $row['username'] && $pass == $row["password"]){
 
 // }
 echo json_encode($response);
-header('index.php');
+// header('index.php');
 // var_dump($data);
 ?>
