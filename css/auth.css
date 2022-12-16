@@ -1,0 +1,113 @@
+.registrationForm{
+    width: 50%;
+    margin: 0 auto;
+   
+    display: flex;
+    flex-direction:column;
+    margin-top: 25vh;
+    text-align: center;
+    color: wheat;
+}
+.registrationForm input{
+    margin: 0 auto;
+    background: none;
+
+    border: none;
+    border-bottom: 1px solid wheat;
+    width: 25vw;
+    margin-bottom: 20px;
+    height: 30px;
+    font-size: 16px;
+    color: wheat;
+}
+
+.authorizationForm{
+    /* visibility: hidden; */
+    width: 50%;
+    margin: 0 auto;
+   
+    display: flex;
+    flex-direction:column;
+    margin-top: 25vh;
+    text-align: center;
+    color: wheat;
+}
+
+
+.authorizationForm input{
+    margin: 0 auto;
+    background: none;
+
+    border: none;
+    border-bottom: 1px solid wheat;
+    width: 25vw;
+    margin-bottom: 20px;
+    height: 30px;
+    font-size: 16px;
+    color: wheat;
+}
+
+.registrationForm button{
+    margin: 0 auto;
+    background: wheat;
+    border: none;
+    border-bottom: 1px solid wheat;
+    width: 25vw;
+    margin-bottom: 20px;
+    height: 30px;
+    border-radius: 2px;
+    /* line-height: 30px; */
+    font-size: 16px;
+    color: wheat;
+    color:#2f3640;
+    cursor: pointer;
+}
+.authorizationForm button{
+    margin: 0 auto;
+    background: wheat;
+    border: none;
+    border-bottom: 1px solid wheat;
+    width: 25vw;
+    margin-bottom: 20px;
+    height: 30px;
+    border-radius: 2px;
+    /* line-height: 30px; */
+    font-size: 16px;
+    color: wheat;
+    color:#2f3640;
+    cursor: pointer;
+}
+#form1btn{
+    background: none;
+    color: wheat;
+    border: none;
+    letter-spacing: 1px;
+    transition: 1s;
+    cursor: pointer;
+}
+#form1btn:hover{
+    /* border-bottom: 1px solid wheat; */
+    letter-spacing: 2px;
+    transition: 1s;
+
+}
+#form2btn:hover{
+    /* border-bottom: 1px solid wheat; */
+    letter-spacing: 2px;
+    transition: 1s;
+
+}
+#form2btn{
+    background: none;
+    color: wheat;
+    border: none;
+    letter-spacing: 1px;
+    transition: 1s;
+    cursor: pointer;
+}
+#form2btn:hover{
+    /* border-bottom: 1px solid wheat; */
+    letter-spacing: 2px;
+    transition: 1s;
+
+}
