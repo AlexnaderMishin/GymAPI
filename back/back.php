@@ -11,12 +11,20 @@ $w = $data["weight"];
 $indexMass = $data["imb"];
 $indexFat = $data["ifb"];
 $userId = $_SESSION['userId'];
-
+$log = $_SESSION['userId'];
+$arrData  = [];
+// echo $log;
+$date = date("Y.m.d");
 if( isset ($h, $w, $indexMass)){
     
-    $sql = "INSERT INTO user_info (`user_id`, `user_weight`, `user_height`, `ibm`) VALUES ('$userId','$w', '$h', '$indexMass')";
+    $sql = "INSERT INTO user_info (`user_id`, `user_weight`, `user_height`, `ibm`, `bfm`, `date`) VALUES ('$userId','$w', '$h', '$indexMass', '$indexFat', '$date ')";
     $pdo->exec($sql);
-    echo $h.'-'.$w.'-'.$indexMass.'-'.$_SESSION['userId'];
 }
+echo json_encode($response);    
 
+
+// 
 // echo $h.' '.$w.' '.$indexMass;
+?>
+
+
