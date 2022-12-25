@@ -24,8 +24,9 @@ session_start();
     <div>
         <a href="/">ГЛАВНАЯ</a> 
         <a href="/front/profile.php">ПРОФИЛЬ</a> 
+        <a href="/front/workout.php">ТРЕНИРОВКА</a> 
         <a href="#">СТАТИСТИКА</a> 
-        <a href="#">УПРАЖНЕНИЯ</a> 
+        <a href="/front/exercises.php">УПРАЖНЕНИЯ</a> 
         <?php if(! isset($_SESSION['userLogin'])){echo '<a href="front/login.php">ВОЙТИ</a>';}else{ echo '<a href="/back/ClearSession.php">ВЫЙТИ('.$_SESSION['userLogin'].')</a>';} ?>
     </div> 
   
