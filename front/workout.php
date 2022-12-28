@@ -48,8 +48,71 @@ include '/program/ospanel/domains/api/back/connect.php';
         var exercise = $('#exercise').val();
         var weight = $('#weight').val();
         var count = $('#count').val();
+        var weightStat = 0;
+        var countStat = 0;
+
+       
+        var weightRegex = /^[1-9]{1,3}$/;
+        var countRegex = /^[1-9]{1,3}$/;
+
+        if(weightRegex.exec(weight) == null){
+            $('#weight').css("color" , "red");
+            $('#weight').css("border-color" , "red");
+            var weightStat = 0;
+        }else{
+            $('#weight').css("color" , "green");
+            $('#weight').css("border-color" , "green");
+            var weightStat = 1;
+        }
+        if(countRegex.exec(count) == null){
+            $('#count').css("color" , "red");
+            $('#count').css("border-color" , "red");
+            var countStat = 0;
+        }else{
+            $('#count').css("color" , "green");
+            $('#count').css("border-color" , "green");
+            var countStat = 1;
+        }
         
-        // console.log(exercise, weight, count);
+        console.log(exercise, weight, count);
+
+        var toServer = {
+            exercise: exercise,
+            weight : weight,
+            count : count,
+          }
+
+          var JSONToServer = JSON.stringify(toServer);
+
+          if(countStat && weightStat == 1){
+            $.ajax({
+              url: '/back/work.php',
+              type: 'post',
+              data: 'data=' + JSONToServer,
+
+              success: function(response){
+                // $("#textInfo").text("Данные отправлены!");
+                // $("#textInfo").text(response['status']);
+              
+                
+                  console.log('Данные отправлены!');
+                  console.log(response["message"]);
+                
+              },
+              error: function(response){
+                // $("#textInfo").text("Произошла ошибка!");
+                  console.log(response["message"]);
+              }
+              
+          });
+          }else{
+            $('#count').css("color" , "red");
+            $('#count').css("border-color" , "red");
+            $('#weight').css("color" , "red");
+            $('#weight').css("border-color" , "red");
+          }
+
+          
     }
 </script>
 
