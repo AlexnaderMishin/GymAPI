@@ -1,6 +1,9 @@
 <?php
+session_start();
 //подключение файла БД
 include 'connect.php';
+header('Content-Type: application/json; charset=utf-8');
+
 // include '.htaccess';
 
 //получение данных от ajax
@@ -16,7 +19,7 @@ $passConf = $data["passwordConf"];
 //вывожу список пользотваелей для сравнения
 $stmt = $pdo->query("SELECT * FROM `users` WHERE `username` = '$log'");
 $row = $stmt->fetch();
-
+$idUser = $row['id'];
 //паттерн регулярного выражения для сравнения с логином
 $pattern = '/^[a-zA-Z][a-zA-Z0-9]{5,12}$/';
 $patternPass = '/^[a-zA-Z0-9]{8,15}$/';
@@ -38,20 +41,45 @@ if($log != $row['username']){
                 //знаосим данные в базу
                 $sql = "INSERT INTO users (`username`, `password`) VALUES ('$log', '$passmd5')";
                 $pdo->exec($sql);
-                echo "Пользователь добавлен в базу данных";
+                $_SESSION['userId'] = $idUser;
+                $_SESSION['userLogin'] = $log;
+                $response = [
+                    "mess" => 'success',
+                    "idUser" => $idUser,
+                    "userLogin" => $log,
+                    "stat" => true
+                ];
+                
+                
             }else{
-                echo "Пароли не совпадают";
+                $response = [
+                    "message" => 'Пароли не совпадают',
+                    "status" => false
+                ];
+              
             }
         }else{
+            $response = [
+                "message" => 'Пароль не соответствует требованиям',
+                "status" => false
+            ];
             echo "Пароль не соответствует требованиям";
         }
     }else{
-        echo "Логин не соответствует требованиям";
+        $response = [
+            "message" => 'Логин не соответствует требованиям',
+            "status" => false
+        ];
+       
     }
 }else{
-echo "Логин занят!";
-}
+    $response = [
+        "message" => 'Логин занят!',
+        "status" => false
+    ];
 
+}
+echo json_encode($response);
 
 //проверка на наличие указанного логина
 // if($log != $row['username']){

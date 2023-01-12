@@ -1,45 +1,18 @@
 <?php 
 include 'header.php'; 
-include '/program/ospanel/domains/api/back/connect.php';
+include '../back/connect.php';
 ?>
 <body>
-    <style>
-        .settings{
-            color: white;
-            margin: 50px;
-            display: block;
-        }
-        .settings input{
-            background: none;
-            border: none;
-            border-bottom: 1px solid white;
-            outline: none;
-            color: white;
-            font-size: 14px;
-        }
-        select{
-           
-            background: none;
-            color: white;
-            font-size: 16px;
-            outline: none;
-            border: none;
-          
-        }
-        select option{
-            background: #2f3640;          
-            color: white;
-        }
-       
-    </style>
 
+<div class="container-fluid p-3 mb-2 d-flex align-items-center justify-content-center">
 <!-- форма для заполнения -->
-<div class="settings">
+<div class="container">
     <!-- счётчик выполненых подходов -->
     <p id="counterField">Подход | 1</p>
 
     <!-- вывысти список упржанений -->
-    <select id="exercise">
+    
+    <select class="form-select" aria-label="Default select example" id="exercise">
     <?php
                   $stmt = $pdo->query("SELECT * FROM `exercises`");
                   while($row = $stmt->fetch()){
@@ -48,47 +21,38 @@ include '/program/ospanel/domains/api/back/connect.php';
     ?>
     </select>
     <!-- вес -->
-    <label for="weight">Вес  </label>
-    <input type="text" id="weight">
+    <label for="weight" class="form-label">Вес:</label>
+    <input type="number" id="weight" class="form-control" placeholder="Вес:"/>
+    <!-- <input type="text" id="weight"> -->
     <!-- кол-во -->
-    <label for="count">Повт.  </label>
-    <input type="text" id="count">     
+
+    <!-- <input type="text" id="count"> -->
+    <label for="count" class="form-label">Кол-во повторений:</label>
+    <input type="number" id="count" class="form-control" placeholder="Кол-во повторений:"/><br>   
     <!-- кнопка отправки -->
-    <button onclick="sendStat()" id="counter">Далее</button>
-</div>
-<!-- Таблица реузльтатов по подходам -->
-<div class="tableResult">
-    <table>
+    <div class="d-grid gap-2">
+    <button type="button" class="btn btn-outline-warning btn-lg" onclick="sendStat()" id="counter">Далее</button><br> 
+    </div>
+    <table class="table table-dark table-hover" id="tableResult">
         <tr>
-            <th>№</th>
+            <th>Подход</th>
             <th>Вес</th>
             <th>Кол-во</th>
         </tr>
-        <tr>
-            <th>1</th>
-            <th>12</th>
-            <th>4</th>
-        </tr>
+        
     </table>
 </div>
 
-<script>
-    //создаю массив для значений подхода
-    var arrStatistic = new Map([
-                ['keyRepeat', 'counterVal'],
-                ['keyWeight', 'weight'],
-                ['keyCount', 'count'],
-            ]);
+
+<!-- Таблица реузльтатов по подходам -->
+
+
+<script>    
     //счётчик подходов
-    
-    
-
-   
-    var counterVal = 1;
-
+    var counterVal = 0;
+    //функция отправки
     function sendStat(){
-        
-        
+        //получение данных из полей
         var exercise = $('#exercise').val();
         var weight = $('#weight').val();
         var count = $('#count').val();
@@ -99,7 +63,7 @@ include '/program/ospanel/domains/api/back/connect.php';
        //регулярное выражения для валидации веса и повторений
         var weightRegex = /^[1-9]{1,3}$/;
         var countRegex = /^[1-9]{1,3}$/;
-
+        //валидация полей
         if(weightRegex.exec(weight) == null){
             $('#weight').css("color" , "red");
             $('#weight').css("border-color" , "red");
@@ -117,69 +81,43 @@ include '/program/ospanel/domains/api/back/connect.php';
             $('#count').css("color" , "green");
             $('#count').css("border-color" , "green");
             var countStat = 1;
-        }
-        
-       
-        
+        }    
+        //объект для отправки
         var toServer = {
             exercise: exercise,
             weight : weight,
             count : count,
           }
-
+          //формирование json строки
           var JSONToServer = JSON.stringify(toServer);
-
-          if(countStat && weightStat == 1){
-            arrStatistic.set([
-                ['keyRepeat', counterVal],
-                ['keyWeight', weight],
-                ['keyCount', count],
-            ]);
-
-            Object.keys(arrStatistic).forEach(function(key, value) {
-  console.log(this[value]);
-}, arrStatistic);
-
-            // console.log(arrStatistic.get('keyRepeat'));
+            //условие отправки
+            if(weightStat && countStat == 1 ){
+            //обновление счётчика подхода
             updateDisplay(++counterVal);
-            
             function updateDisplay(val) {
-            document.getElementById("counterField").innerHTML = ("Подход | " + val);
+            document.getElementById("counterField").innerHTML = ("Подход | " + ++val);
             }
-
-            console.log(arrStatistic);
+            //Отправка данных
             $.ajax({
               url: '/back/work.php',
               type: 'post',
               data: 'data=' + JSONToServer,
-
               success: function(response){
-                // $("#textInfo").text("Данные отправлены!");
-                // $("#textInfo").text(response['status']);
-              
-                
+                //если ОК, обновить данные в таблице подходов
+                $('#tableResult').append('<tr class="child"><th>'+ counterVal +'</th><th>'+ weight +'</th><th>'+ count +'</th></tr>');
+                  //проверка      
                   console.log('Данные отправлены!');
                   console.log(response["message"]);
-                
               },
               error: function(response){
-                // $("#textInfo").text("Произошла ошибка!");
                   console.log(response["message"]);
               }
-              
-          });
-          }else{
-            $('#count').css("color" , "red");
-            $('#count').css("border-color" , "red");
-            $('#weight').css("color" , "red");
-            $('#weight').css("border-color" , "red");
+            });
+            }
+          //конец функции
           }
-
-//           $.each(arrStatistic, function(index, value)
-// {
-// console.log('Индекс: ' + index + '; Значение: ' + value);
-// });
-    }
+        
+    
         // сброс счётчкика
 //     function resetCounter() {
 //     counterVal = 0;
@@ -188,5 +126,5 @@ include '/program/ospanel/domains/api/back/connect.php';
 
 </script>
 
-
+</div>
 </body>

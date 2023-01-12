@@ -1,30 +1,33 @@
 <?php 
 include 'header.php'; 
-include '/program/ospanel/domains/api/back/connect.php';
+include '../back/connect.php';
 ?>
 
 <body>
-    <div class="container">
-        <div class="userChar">
+<div class="container-fluid p-3 mb-2 d-flex align-items-center justify-content-center">
+  <div class="container">
             <h2>Основные показатели:</h2>
-            <label for="height">Рост:</label><br>
-            <input type="text" id="height" name="height"></input><br>
+            
+            <label for="height" class="form-label">Рост:</label>
+            <input type="number" class="form-control" id="height" name="height"/>
 
-            <label for="weight">Вес:</label><br>
-            <div>
-            <input type="text" id="weight" name="weight"></input><br>
-            </div>
-            <label for="imb">Индекс массы тела:</label><br>
-            <input type="text" id="imb" name="imb"></input><br>
+            <label for="weight" class="form-label">Вес:</label>
+            <input type="number" id="weight" class="form-control" name="weight"/>
+           
+            <label for="imb" class="form-label">Индекс массы тела:</label>
+            <input type="number" id="imb" class="form-control" name="imb"/>
 
-            <label for="ifb">Процент жира в теле:</label><br>
-            <input type="text" id="ifb" name="ifb"></input><br>
+            <label for="ifb" class="form-label">Процент жира в теле:</label>
+            <input type="number" id="ifb" class="form-control" name="ifb"/>
+            
+            <div class="d-grid gap-2">
             <p id="textInfo"></p>
-            <button onclick="sendChar()">Добавить</button>
-        </div>
-        <div class="charResult">
+            <button type="button" class="btn btn-outline-warning btn-lg" onclick="sendChar()" id="counter">Добавить</button><br> 
+            </div>
+            
         
-        <table>
+        
+        <table class="table table-dark table-hover" id="tableResult">
           <h2>Основные показатели:</h2>
             <tr>
               <th>Дата:</th>
@@ -40,8 +43,8 @@ include '/program/ospanel/domains/api/back/connect.php';
                   }
                 ?>
         </table>
-        </div>
-    </div>
+  </div>
+</div>
     
 
     <script>
@@ -77,14 +80,13 @@ include '/program/ospanel/domains/api/back/connect.php';
 
           
           $.ajax({
-              url: '/back/back.php',
+              url: '../back/back.php',
               type: 'post',
               data: 'data=' + JSONToServer,
 
-              success: function(response){
+              success: function(){
                 $("#textInfo").text("Данные отправлены!");
-                $("#textInfo").text(response['status']);
-                console.log(response['data']);
+                
                 
                   // console.log('Данные отправлены!');
                   // console.log(imb);

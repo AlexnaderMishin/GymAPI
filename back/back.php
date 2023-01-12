@@ -23,8 +23,7 @@ if( isset ($h, $w, $indexMass)){
 echo json_encode($response);    
 
 
-// 
-// echo $h.' '.$w.' '.$indexMass;
+
 ?>
 
 

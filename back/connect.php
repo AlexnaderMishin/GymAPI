@@ -1,9 +1,9 @@
 <?php
 
 $host='localhost';
-$db='TrainingAppDB';
-$user='root';
-$pass='';
+$db='alexat1m_gym';
+$user='alexat1m_gym';
+$pass='!tsdRimVq7196';
 $charset='utf8';
 
 // $dsn="mysql:host=$host;dbname=$db;charset=$charset";
