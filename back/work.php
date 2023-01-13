@@ -1,37 +1,39 @@
 <?php
-include 'connect.php';
 header('Content-Type: application/json; charset=utf-8');
-session_start();
+include 'connect.php';
+
+
 
 $data = $_POST["data"];
 $data = json_decode($data, TRUE);
 
 //заношу в переменные
-$ex = $data["exercise"];
-$we = $data["weight"];
-$co = $data["count"];
-$log = $_SESSION['userId'];
-$date = date("Y.m.d");
+$muscleGroup = $data["group"];
+$exerciseArray = array();
 
-$patternWeight = '/^[1-9]{1,3}$/';
-$patternCount = '/^[1-9]{1,3}$/';
-
+$stmt = $pdo->query("SELECT * FROM `exercises` WHERE id_group = '$muscleGroup'");
+while($row = $stmt->fetch()){
+    $exerciseArray[] = $row;
+}
 
 
-if( isset ($ex, $we, $co)){
-    if(preg_match($patternWeight, $we) && preg_match($patternCount, $co)){
-        $sql = "INSERT INTO `workout_stat`(`user_id`, `exercise_id`, `weight`, `count`, `date`)
-        VALUES ('$log', '$ex', '$we', '$co', '$date')";
-        $pdo->exec($sql);
-        $response = [
-            "message" => 'success',
-        ]; 
-    }else{
-        $response = [
-            "message" => 'error',
-        ]; 
-    }
-    } 
+if($exerciseArray !=['']){
+    $response = [
+        'exercise' => $exerciseArray,
+        'message' => 'ok'
+    ];
+
+}else{
+    $response = [
+        'exercise' => $exerciseArray,
+        'message' => 'error'
+    ];
+}
+    
+
+
+
+// var_dump($exerciseArray);
 echo json_encode($response);   
 
 ?>
