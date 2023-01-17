@@ -20,13 +20,13 @@ while($row = $stmt->fetch()){
 if($exerciseArray !=['']){
     $response = [
         'exercise' => $exerciseArray,
-        'message' => 'ok'
+        'message' => 'Список упражнений получен'
     ];
 
 }else{
     $response = [
         'exercise' => $exerciseArray,
-        'message' => 'error'
+        'message' => 'Ошибка при получении списка упражнений'
     ];
 }
     

@@ -3,8 +3,17 @@ include 'header.php';
 include '../back/connect.php';
 ?>
 <body>
-
-<div class="container-fluid p-3 mb-2 d-flex align-items-center justify-content-center">
+<style>
+  label{
+    font-size: 18px;
+    margin-left: 20px;
+  }
+  input[type=checkbox] {
+    transform: scale(1.5);
+ 
+}
+</style>
+<div class="container-fluid">
 <!-- форма для заполнения -->
 
 <!-- Настройка тренировки -->
@@ -12,10 +21,10 @@ include '../back/connect.php';
 
 
     <!-- счётчик выполненых подходов -->
-<div class="container">
+<div class="container-fluid">
 <div class="d-grid gap-2">
-   <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSettings" aria-expanded="false" aria-controls="collapseSettings">
-    Настроить тренировку
+   <button class="btn btn-warning" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSettings" aria-expanded="false" aria-controls="collapseSettings">
+   &#9660;  Настроить тренировку  &#9660;
   </button>
 </div>
 <div class="collapse" id="collapseSettings">
@@ -36,15 +45,9 @@ include '../back/connect.php';
         </div>
   </div>
 </div><br>
-<div class="d-grid gap-2">
-   <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseMuscleGroups" aria-expanded="false" aria-controls="collapseMuscleGroups">
-    Выбор упражнений
-  </button>
-</div>
-<div class="collapse" id="collapseMuscleGroups">
-  <div class="card card-body bg-dark text-white">
 
-  <select class="form-select" aria-label="Default select example" id="groups">
+    <!-- список упражнений -->
+    <select class="form-select" aria-label="Default select example" id="groups">
   <option value="">Выберите группу мышц:</option>
     <?php
                   $stmt = $pdo->query("SELECT * FROM `Muscle_group`");
@@ -52,24 +55,19 @@ include '../back/connect.php';
                   echo '<option value="'.$row['id'].'">'.$row['desk'].'</option>';
                   }
                  $title = $row['id'];
-                 global $title;
+                
     ?>
     </select><br>
-    <!-- список упражнений -->
-    <table class="table table-dark table-hover" id="tableResult">
-        <tr>
-            <th>№</th>
-            <th>Название</th>
-         
-            <th>Добавить</th>
-        </tr>
-        
-    </table>
-        
+    
+    <h4 align="center">Список упражнений</h4><br>
+    <div id="ExerciseList">
+
+    </div>
+  
         <!-- кнопка -->
         <div class="d-grid gap-2">
             <p id="textInfo"></p>
-            <button type="button" class="btn btn-outline-warning btn-lg" onclick="sendEx()" id="counter">Подтвердить настройки</button><br> 
+            <button type="button" class="btn btn-outline-warning btn-lg" onclick="getID()" id="counter">Начать тренировку!</button><br> 
         </div>
   </div>
 </div>
@@ -86,7 +84,7 @@ $(document).on('input', '#customRange3', function() {
     $('#slider_value').html( $(this).val() + ' секунд' );
 });
 
-$( "#groups" ).click(function() {
+$( "#groups" ).change(function() {
     var group = $('#groups').val();
 
     var toServer = {
@@ -95,42 +93,49 @@ $( "#groups" ).click(function() {
           }
           //формирование json строки
           var JSONToServer = JSON.stringify(toServer);
-    
+         
      $.ajax({
               url: '/back/work.php',
               type: 'post',
               data: 'data=' + JSONToServer,
               success: function(response){
-                //если ОК, обновить данные в таблице подходов
-                
-                  //проверка      
-                  console.log('Данные отправлены!');
                   console.log(response['message']);
+                  // заношу массив в переменную
                   var exercise = response['exercise'];
-                  
-                  // console.log(exercise);
-                  exercise.forEach((element, index, array) => {
-                  $('#tableResult').append('<tr class="child"><th>'+ element.id +'</th><th>'+ element.title +'</th><th>'+ element.description +'</th></tr>');
-                  console.log(element.title); // 100, 200, 300
-                  });
-                //   $('#tableResult').append('<tr class="child"><th>'+ counterVal +'</th><th>'+ weight +'</th><th>'+ count +'</th></tr>');
+                  //очищаю поле перед вставкой данных
+                  $("#ExerciseList").html("");
+                  //прохожусь циклом по полученному массиву объектов
+                    exercise.forEach((element, index, array) => {
+                      // вывожу все нужные данные из массива
+                      
+                      $('#ExerciseList').append('<div class="form-check"><input class="form-check-input" type="checkbox" value="'+ element.id +'" id="flexCheckIndeterminate '+ element.id +'"><label class="form-check-label" for="flexCheckIndeterminate '+ element.id +'">'+ element.title +'</label></div><br>');
+                    });
               },
               error: function(response){
-                  console.log("error");
                   console.log(response['message']);
               }
             });
           
           //конец функции
-          
-console.log(group);
 });
 
 
+function getID() {
+  var i = 0;
+  var arrIdExercise = {};
+
+  $('.form-check-input:checked').each(function () {
+  arrIdExercise[i++] = {"idExercise" : $(this).val()}; 
+  });   
+
+  console.log(arrIdExercise);
+}
+  
 
 
 
 
+// $("#exerciseList").load(location.href + " #exerciseList");
 
 
 

@@ -1,0 +1,10 @@
+input[type=checkbox] {
+    /* transform: scale(1.5); */
+}
+body{
+    color: black;
+}
+.form-check-label label{
+    font-size: 48px;
+    padding-left: 16px;
+} 
